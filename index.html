@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo CRUD com Fetch - Create</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+    <img src="BookTeca certo.png" alt="Logo do Site" id="logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="contato.html">Contato</a>
+    </nav>
+    </header>
+
+    <main>
+        <section id="form-section">
+            <h2>Cadastrar Livro</h2>
+            <form id="livro-form">
+                <input type="hidden" id="livroId">
+
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" placeholder="Digite o título do livro" required>
+                <span id="erro-titulo" class="erro"></span>
+
+                <label for="autor">Autor:</label>
+                <input type="text" id="autor" placeholder="Digite o nome do autor" required>
+
+                <button type="submit">Salvar</button>
+        
+            </form>
+        </section>
+
+        <section id="livros-section">
+            <h2>Lista de Livros</h2>
+            <ul id="livro-lista"></ul>
+        </section>
+    </main>
+
+
+   <script src="app.js"></script>
+</body>
+</html>
