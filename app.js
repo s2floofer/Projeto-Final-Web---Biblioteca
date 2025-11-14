@@ -1,6 +1,12 @@
 // CRUD (usando JSONPlaceholder para simular)
 const API_URL = 'https://jsonplaceholder.typicode.com/posts';
 const STORAGE_KEY = 'livros';
+const novo = { 
+    id: Date.now(), 
+    titulo, 
+    autor,
+    imagem: "https://via.placeholder.com/150"
+};
 
 // Estado da aplicação (lista local de livros)
 let livros = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -12,6 +18,9 @@ const inputAutor = document.getElementById('autor');
 const inputId = document.getElementById('livroId');
 const spanErroTitulo = document.getElementById('erro-titulo');
 const listaEl = document.getElementById('livro-lista');
+const inputImagem = document.getElementById('imagem');
+const spanErroImagem = document.getElementById('erro-imagem');
+
 
 // Salva o estado atual no localStorage
 function salvarLocal() {
@@ -45,7 +54,11 @@ function criarItemLista(livro) {
   li.className = 'livro-item';
 
   const texto = document.createElement('span');
-  texto.innerHTML = `<strong>${livro.titulo}</strong> — ${livro.autor}`;
+  texto.innerHTML = `
+      <img src="${livro.imagem || 'https://via.placeholder.com/80'}" width="50">
+      <strong>${livro.titulo}</strong> — ${livro.autor}
+  `;
+
 
   const acoes = document.createElement('div');
   acoes.style.display = 'flex';
@@ -81,17 +94,27 @@ function renderizar() {
 function preencherFormularioParaEdicao(id) {
   const livro = livros.find(l => l.id === id);
   if (!livro) return;
+  
   inputId.value = livro.id;
   inputTitulo.value = livro.titulo;
   inputAutor.value = livro.autor;
+  inputImagem.value = livro.imagem || "";
 }
 
+
 // Adiciona um livro (otimista): atualiza o estado local e faz POST
-async function adicionarLivro(titulo, autor) {
-  const novo = { id: Date.now(), titulo, autor };
+async function adicionarLivro(titulo, autor, imagem) {
+  const novo = { 
+      id: Date.now(), 
+      titulo, 
+      autor,
+      imagem: imagem || "https://via.placeholder.com/150"
+  };
+
   livros.push(novo);
   salvarLocal();
   renderizar();
+
   try {
     await fetch(API_URL, {
       method: 'POST',
@@ -104,25 +127,31 @@ async function adicionarLivro(titulo, autor) {
   }
 }
 
+
 // Atualiza um livro, altera local e faz PUT
-async function atualizarLivro(id, titulo, autor) {
+async function atualizarLivro(id, titulo, autor, imagem) {
   const idx = livros.findIndex(l => l.id == id);
   if (idx === -1) return;
+
   livros[idx].titulo = titulo;
   livros[idx].autor = autor;
+  livros[idx].imagem = imagem || livros[idx].imagem;
+
   salvarLocal();
   renderizar();
+
   try {
     await fetch(`${API_URL}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, title: titulo, body: autor })
+      body: JSON.stringify({ title: titulo, body: autor })
     });
     mostrarMensagem('Livro atualizado.');
   } catch (err) {
     mostrarMensagem('Erro ao atualizar no servidor (mas alterado localmente).', 'erro');
   }
 }
+
 
 // Remove um livro, remove local e faz DELETE
 async function excluirLivro(id) {
@@ -140,7 +169,7 @@ async function excluirLivro(id) {
 
 // Validação simples do título
 function validarTitulo(titulo) {
-  if (!titulo || titulo.trim().length < 3) {
+  if (!titulo || titulo.trim().length <= 3) {
     spanErroTitulo.textContent = 'O título deve ter no mínimo 3 caracteres.';
     return false;
   }
@@ -151,18 +180,30 @@ function validarTitulo(titulo) {
 // Evento de submit: decide entre criar ou atualizar
 form.addEventListener('submit', function (e) {
   e.preventDefault();
+
   const titulo = inputTitulo.value.trim();
   const autor = inputAutor.value.trim() || 'Desconhecido';
+  const imagem = inputImagem.value.trim();
+
   if (!validarTitulo(titulo)) return;
+
   const id = inputId.value;
+
   if (id) {
-    atualizarLivro(id, titulo, autor);
+    atualizarLivro(id, titulo, autor, imagem);
   } else {
-    adicionarLivro(titulo, autor);
+    adicionarLivro(titulo, autor, imagem);
   }
+
   limparFormulario();
 });
 
 
+// SALVAR LISTA NO LOCALSTORAGE
+function salvarLivros(livros) {
+    localStorage.setItem("livros", JSON.stringify(livros));
+}
 
-
+document.addEventListener("DOMContentLoaded", () => {
+    renderizar();
+});

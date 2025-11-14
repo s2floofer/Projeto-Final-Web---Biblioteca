@@ -34,17 +34,16 @@ const livrosProntos = [
 
 // PEGA OS LIVROS DO LOCALSTORAGE 
 function carregarLivrosCadastrados() {
-    const armazenados = localStorage.getItem("livros");
-    return armazenados ? JSON.parse(armazenados) : [];
+    return JSON.parse(localStorage.getItem("livros")) || [];
 }
 
-// CRIA CARD DE LIVRO 
+// Criar card visual
 function criarCard(livro) {
     const card = document.createElement("div");
     card.classList.add("livro-card");
 
     card.innerHTML = `
-        <img src="${livro.imagem || 'https://via.placeholder.com/150'}" alt="Capa do livro">
+        <img src="${livro.imagem || 'https://via.placeholder.com/150'}">
         <h3>${livro.titulo}</h3>
         <p>${livro.autor}</p>
     `;
@@ -52,24 +51,44 @@ function criarCard(livro) {
     return card;
 }
 
-// CARREGA TODOS OS LIVROS 
+// Carregar catálogo
 function carregarCatalogo() {
     const container = document.getElementById("catalogo-container");
-    if (!container) return; // evita erro na página do CRUD
-
     container.innerHTML = "";
 
-    const livrosCadastrados = carregarLivrosCadastrados();
-    const todosLivros = [...livrosProntos, ...livrosCadastrados];
+    const cadastrados = carregarLivrosCadastrados();
 
-    todosLivros.forEach(livro => {
-        container.appendChild(criarCard(livro));
-    });
+    // UNE OS DO CRUD + OS PRONTOS
+    const todos = [...livrosProntos, ...cadastrados];
+
+    todos.forEach(l => container.appendChild(criarCard(l)));
+}
+
+function excluirLivro(index) {
+    let livros = carregarLivrosCadastrados();
+    livros.splice(index, 1); // remove o livro
+    localStorage.setItem("livros", JSON.stringify(livros));
+    carregarCatalogo(); // recarrega
+}
+
+function editarLivro(index) {
+    let livros = carregarLivrosCadastrados();
+    let livro = livros[index];
+
+    const novoTitulo = prompt("Novo título:", livro.titulo);
+    const novoAutor = prompt("Novo autor:", livro.autor);
+    const novaImagem = prompt("URL da nova imagem:", livro.imagem);
+
+    if (novoTitulo) livro.titulo = novoTitulo;
+    if (novoAutor) livro.autor = novoAutor;
+    if (novaImagem) livro.imagem = novaImagem;
+
+    livros[index] = livro;
+    localStorage.setItem("livros", JSON.stringify(livros));
+    carregarCatalogo();
 }
 
 // Executa o catálogo 
 document.addEventListener("DOMContentLoaded", () => {
     carregarCatalogo();
 });
-// Inicialização do CRUD
-renderizar();
