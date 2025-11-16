@@ -1,3 +1,4 @@
+/* Estiliza o body, com fonte, margem zerada, cor */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -8,6 +9,7 @@ body {
   margin: 0;
 }
 
+/* Cabeçalho com cor e alinhamento */
 header {
   background: linear-gradient(90deg, #fa8dbb, #7b1cbb);
   color: white;
@@ -15,17 +17,20 @@ header {
   text-align: center;
   
 }
- header img {
+
+header img {
   height: 60px;
   width: 200px;
- }
+  }
 
+/* Decoração do nav do cabeçalho */
 nav a {
   color: white;
   text-decoration: none;
   margin: 0 10px;
 }
 
+/* quando passa o mouse no texto fica sublinhado */
 nav a:hover {
   text-decoration: underline;
 }
@@ -40,6 +45,7 @@ h2 {
   color: #591cbb;
 }
 
+/* Estiliza e padroniza os formulários */
 form {
   display: flex;
   flex-direction: column;
@@ -55,6 +61,7 @@ input, button {
   font-size: 1em;
 }
 
+/* Define cor e tamanho do botão */
 button {
   background-color: #fd7cb2;
   color: white;
@@ -63,6 +70,7 @@ button {
   cursor: pointer;
 }
 
+/* Troca a cor do botão ao passar o mouse por cima */
 button:hover {
   background-color: #7b1cbb;
 }
@@ -72,6 +80,7 @@ button:hover {
   padding: 0;
 }
 
+/* Lista de livros chamada pela classe é estilizada com forma e tamanho */
 #livro-lista li {
   background: white;
   margin: 8px 0;
@@ -83,39 +92,41 @@ button:hover {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
-/*Parte do catalogo só*/
-
+/* Mensagem de erro, para a validação */
 .erro {
   color: red;
   font-size: 0.9em;
   margin-top: -5px;
 }
 
+/* Disposição dos livros */
 .livros-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
 }
 
+/* Personalizacao dos cards de livro */
 .livro-card {
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    padding: 10px;
-    text-align: center;
-    transition: 0.3s;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  transition: 0.3s;
 }
 
+/* Transição de quando passa o cursor em cima do card */
 .livro-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .livro-card img {
-    width: 120px;
-    height: 170px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 8px;
+  width: 120px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
 }

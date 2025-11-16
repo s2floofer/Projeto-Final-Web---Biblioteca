@@ -1,3 +1,4 @@
+// Lista fixa de livros que já vêm prontos no catálogo inicial
 const livrosProntos = [
     {
         titulo: "A Seleção",
@@ -32,16 +33,19 @@ const livrosProntos = [
 ];
 
 
-// PEGA OS LIVROS DO LOCALSTORAGE 
+// ---------------- CARREGA LIVROS DO LOCALSTORAGE ----------------
+// Retorna os livros cadastrados pelo usuário, ou lista vazia se não houver nada salvo
 function carregarLivrosCadastrados() {
     return JSON.parse(localStorage.getItem("livros")) || [];
 }
 
-// Criar card visual
+
+// ---------------- CRIA VISUALMENTE UM CARD DE LIVRO ----------------
 function criarCard(livro) {
     const card = document.createElement("div");
-    card.classList.add("livro-card");
+    card.classList.add("livro-card"); 
 
+    // Conteúdo HTML do card
     card.innerHTML = `
         <img src="${livro.imagem || 'https://via.placeholder.com/150'}">
         <h3>${livro.titulo}</h3>
@@ -51,44 +55,62 @@ function criarCard(livro) {
     return card;
 }
 
-// Carregar catálogo
+
+// ---------------- CARREGA E EXIBE TODOS OS LIVROS ----------------
 function carregarCatalogo() {
     const container = document.getElementById("catalogo-container");
-    container.innerHTML = "";
+    container.innerHTML = ""; // limpa catálogo antes de renderizar
 
-    const cadastrados = carregarLivrosCadastrados();
+    const cadastrados = carregarLivrosCadastrados(); // livros do usuário
 
-    // UNE OS DO CRUD + OS PRONTOS
+    // Junta os livros prontos + cadastrados
     const todos = [...livrosProntos, ...cadastrados];
 
+    // Para cada livro, cria um card e adiciona ao container
     todos.forEach(l => container.appendChild(criarCard(l)));
 }
 
+
+// ---------------- EXCLUIR UM LIVRO DO LOCALSTORAGE ----------------
 function excluirLivro(index) {
     let livros = carregarLivrosCadastrados();
-    livros.splice(index, 1); // remove o livro
+    livros.splice(index, 1);  // remove 1 item na posição "index"
+
+    // Salva lista atualizada
     localStorage.setItem("livros", JSON.stringify(livros));
-    carregarCatalogo(); // recarrega
+
+    // Atualiza o catálogo na tela
+    carregarCatalogo();
 }
 
+
+// ---------------- EDITAR UM LIVRO CADASTRADO ----------------
 function editarLivro(index) {
     let livros = carregarLivrosCadastrados();
     let livro = livros[index];
 
+    // Prompts pedem novos valores ao usuário
     const novoTitulo = prompt("Novo título:", livro.titulo);
     const novoAutor = prompt("Novo autor:", livro.autor);
     const novaImagem = prompt("URL da nova imagem:", livro.imagem);
 
+    // Atualiza somente se o usuário digitou
     if (novoTitulo) livro.titulo = novoTitulo;
     if (novoAutor) livro.autor = novoAutor;
     if (novaImagem) livro.imagem = novaImagem;
 
+    // Regrava no array
     livros[index] = livro;
+
+    // Salva no localStorage
     localStorage.setItem("livros", JSON.stringify(livros));
+
+    // Atualiza na tela
     carregarCatalogo();
 }
 
-// Executa o catálogo 
+
+// ---------------- INICIALIZA O CATÁLOGO AO CARREGAR A PÁGINA ----------------
 document.addEventListener("DOMContentLoaded", () => {
-    carregarCatalogo();
+    carregarCatalogo(); 
 });
